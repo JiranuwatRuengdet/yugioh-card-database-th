@@ -57,9 +57,9 @@ const detailEffect =
 let selectedCardId = null;
 
 
-/* =========================
-   SEARCH
-========================= */
+/* ========================================
+   SEARCH / FILTER
+======================================== */
 
 function searchCards() {
 
@@ -75,10 +75,13 @@ function searchCards() {
   const results =
     cards.filter(card => {
 
+      const name =
+        (card.name || "")
+          .toLowerCase();
+
+
       const nameMatch =
-        card.name
-          .toLowerCase()
-          .includes(keyword);
+        name.includes(keyword);
 
 
       const typeMatch =
@@ -95,9 +98,9 @@ function searchCards() {
 }
 
 
-/* =========================
-   SEARCH RESULT
-========================= */
+/* ========================================
+   RENDER SEARCH RESULTS
+======================================== */
 
 function renderSearchResults(results) {
 
@@ -131,14 +134,15 @@ function renderSearchResults(results) {
 }
 
 
-/* =========================
-   CARD ELEMENT
-========================= */
+/* ========================================
+   CREATE CARD
+======================================== */
 
 function createCardElement(card) {
 
   const element =
     document.createElement("div");
+
 
   element.className =
     "card-item";
@@ -157,6 +161,7 @@ function createCardElement(card) {
       src="${card.image}"
       alt="${card.name}"
       loading="lazy"
+      onerror="this.style.display='none'"
     >
 
     <div class="card-name">
@@ -168,7 +173,11 @@ function createCardElement(card) {
 
   element.addEventListener(
     "click",
-    () => selectCard(card.id)
+    () => {
+
+      selectCard(card.id);
+
+    }
   );
 
 
@@ -176,9 +185,9 @@ function createCardElement(card) {
 }
 
 
-/* =========================
+/* ========================================
    SELECT CARD
-========================= */
+======================================== */
 
 function selectCard(id) {
 
@@ -191,28 +200,46 @@ function selectCard(id) {
   if (!card) return;
 
 
-  selectedCardId = id;
+  selectedCardId =
+    card.id;
 
 
   showDetail(card);
 
   showRelated(card);
 
-  refreshActiveCards();
+  refreshCards();
 
 }
 
 
-/* =========================
-   DETAIL
-========================= */
+/* ========================================
+   SHOW DETAIL
+======================================== */
 
 function showDetail(card) {
 
-  detailEmpty.classList.add("hidden");
+  /*
+    ซ่อนหน้า "เลือกการ์ด"
+  */
 
-  detailContent.classList.remove("hidden");
+  detailEmpty.classList.add(
+    "hidden"
+  );
 
+
+  /*
+    แสดงรายละเอียด
+  */
+
+  detailContent.classList.remove(
+    "hidden"
+  );
+
+
+  /*
+    รูป
+  */
 
   detailImage.src =
     card.image;
@@ -221,29 +248,57 @@ function showDetail(card) {
     card.name;
 
 
+  /*
+    ชื่อ
+  */
+
   detailCardName.textContent =
     card.name;
 
 
-  detailType.textContent =
-    card.type;
+  /*
+    ประเภท
+  */
 
+  detailType.textContent =
+    card.type || "-";
+
+
+  /*
+    Attribute
+  */
 
   detailAttribute.textContent =
     card.attribute || "-";
 
 
-  detailLevel.textContent =
-    card.level || "-";
+  /*
+    Level
+  */
 
+  detailLevel.textContent =
+    card.level ?? "-";
+
+
+  /*
+    ATK
+  */
 
   detailAtk.textContent =
     card.atk ?? "-";
 
 
+  /*
+    DEF
+  */
+
   detailDef.textContent =
     card.def ?? "-";
 
+
+  /*
+    Effect
+  */
 
   detailEffect.textContent =
     card.effect || "-";
@@ -251,24 +306,26 @@ function showDetail(card) {
 }
 
 
-/* =========================
+/* ========================================
    RELATED CARDS
-========================= */
+======================================== */
 
 function showRelated(card) {
 
   relatedGrid.innerHTML = "";
 
 
-  const relatedCards =
-    (card.related || [])
+  const relatedIds =
+    card.related || [];
 
+
+  const relatedCards =
+    relatedIds
       .map(id =>
         cards.find(
           item => item.id === id
         )
       )
-
       .filter(Boolean);
 
 
@@ -296,6 +353,7 @@ function showRelated(card) {
           relatedCard
         );
 
+
       relatedGrid.appendChild(
         element
       );
@@ -306,11 +364,15 @@ function showRelated(card) {
 }
 
 
-/* =========================
-   ACTIVE CARD
-========================= */
+/* ========================================
+   REFRESH ACTIVE CARD
+======================================== */
 
-function refreshActiveCards() {
+function refreshCards() {
+
+  /*
+    ลบ active ทั้งหมด
+  */
 
   document
     .querySelectorAll(".card-item")
@@ -324,16 +386,43 @@ function refreshActiveCards() {
 
 
   /*
-    หา card ที่ถูกเลือก
-    จาก data id ภายหลังได้
+    สร้างรายการใหม่เพื่อให้
+    การ์ดที่เลือกมีกรอบทอง
   */
+
+  const keyword =
+    searchInput.value
+      .trim()
+      .toLowerCase();
+
+  const type =
+    typeFilter.value;
+
+
+  const results =
+    cards.filter(card => {
+
+      const name =
+        (card.name || "")
+          .toLowerCase();
+
+
+      return (
+        name.includes(keyword) &&
+        (!type || card.type === type)
+      );
+
+    });
+
+
+  renderSearchResults(results);
 
 }
 
 
-/* =========================
-   INPUT EVENTS
-========================= */
+/* ========================================
+   SEARCH INPUT
+======================================== */
 
 searchInput.addEventListener(
   "input",
@@ -341,15 +430,19 @@ searchInput.addEventListener(
 );
 
 
+/* ========================================
+   TYPE FILTER
+======================================== */
+
 typeFilter.addEventListener(
   "change",
   searchCards
 );
 
 
-/* =========================
+/* ========================================
    CLEAR
-========================= */
+======================================== */
 
 clearButton.addEventListener(
   "click",
@@ -359,13 +452,29 @@ clearButton.addEventListener(
 
     typeFilter.value = "";
 
-    searchGrid.innerHTML = `
-      <div class="empty">
-        ค้นหาการ์ดเพื่อเริ่มต้น
-      </div>
-    `;
 
-    searchCount.textContent = "0";
+    /*
+      ล้างผลการค้นหา
+      แล้วแสดงการ์ดทั้งหมด
+    */
+
+    searchCards();
 
   }
 );
+
+
+/* ========================================
+   INITIAL LOAD
+======================================== */
+
+/*
+  ตรงนี้สำคัญ
+
+  ตอนเปิดเว็บ:
+  - แสดงการ์ดทั้งหมดทางขวา
+  - ไม่เลือกการ์ด
+  - ตรงกลางยังว่าง
+*/
+
+searchCards();
