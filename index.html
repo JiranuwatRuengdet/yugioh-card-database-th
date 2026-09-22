@@ -1,13 +1,36 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ฐานข้อมูลการ์ด Yu-Gi-Oh!</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="controls">...</div>
-  <div class="grid" id="cardGrid"></div>
+  <div class="wrap">
+    <h1>ฐานข้อมูลการ์ด Yu-Gi-Oh!</h1>
+    <p class="sub">พิมพ์ค้นหา เลือกประเภท หรือเรียงลำดับ ระบบจะกรองการ์ดให้ทันที</p>
 
+    <div class="controls">
+      <input id="searchBox" type="text" placeholder="ค้นหาชื่อการ์ด...">
+      <select id="typeFilter">
+        <option value="all">ทุกประเภท</option>
+        <option value="Monster">มอนสเตอร์</option>
+        <option value="Spell">เวทมนตร์</option>
+        <option value="Trap">กับดัก</option>
+      </select>
+      <select id="sortBy">
+        <option value="name">เรียงตามชื่อ (ก-ฮ)</option>
+        <option value="atk-desc">ATK สูง-ต่ำ</option>
+        <option value="atk-asc">ATK ต่ำ-สูง</option>
+      </select>
+    </div>
+
+    <div class="count" id="count"></div>
+    <div class="grid" id="cardGrid"></div>
+  </div>
+
+  <!-- เรียกไฟล์ข้อมูลก่อน แล้วค่อยเรียกไฟล์ที่ใช้ข้อมูลนั้น -->
   <script src="cards.js"></script>
   <script src="script.js"></script>
 </body>
