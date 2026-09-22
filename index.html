@@ -4,12 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ฐานข้อมูลการ์ด Yu-Gi-Oh!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Noto+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="wrap">
     <h1>ฐานข้อมูลการ์ด Yu-Gi-Oh!</h1>
-    <p class="sub">พิมพ์ค้นหา เลือกประเภท หรือเรียงลำดับ ระบบจะกรองการ์ดให้ทันที</p>
+    <p class="sub">เลือกดูการ์ดจากแถบด้านล่าง หรือค้นหาชื่อการ์ดที่ต้องการ</p>
 
     <div class="controls">
       <input id="searchBox" type="text" placeholder="ค้นหาชื่อการ์ด...">
@@ -26,11 +29,13 @@
       </select>
     </div>
 
+    <!-- การ์ดหลักที่กำลังดูอยู่ -->
+    <section class="featured" id="featured"></section>
+
     <div class="count" id="count"></div>
-    <div class="grid" id="cardGrid"></div>
+    <div class="thumb-grid" id="thumbGrid"></div>
   </div>
 
-  <!-- เรียกไฟล์ข้อมูลก่อน แล้วค่อยเรียกไฟล์ที่ใช้ข้อมูลนั้น -->
   <script src="cards.js"></script>
   <script src="script.js"></script>
 </body>
