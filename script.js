@@ -1,22 +1,23 @@
 const searchBox = document.getElementById("searchBox");
 const typeFilter = document.getElementById("typeFilter");
 const sortBy = document.getElementById("sortBy");
-const grid = document.getElementById("cardGrid");
+const thumbGrid = document.getElementById("thumbGrid");
+const featured = document.getElementById("featured");
 const countEl = document.getElementById("count");
 
-function render() {
+let selectedCard = cards[0] || null;
+
+function getFilteredCards() {
   const query = searchBox.value.trim().toLowerCase();
   const type = typeFilter.value;
   const sort = sortBy.value;
 
-  // กรองตามคำค้นหาและประเภท
   let result = cards.filter(function (card) {
     const matchName = card.name.toLowerCase().includes(query);
     const matchType = type === "all" || card.type === type;
     return matchName && matchType;
   });
 
-  // เรียงลำดับ
   if (sort === "name") {
     result.sort(function (a, b) { return a.name.localeCompare(b.name); });
   } else if (sort === "atk-desc") {
@@ -25,38 +26,72 @@ function render() {
     result.sort(function (a, b) { return (a.atk || 0) - (b.atk || 0); });
   }
 
-  // วาดผลลัพธ์ใหม่ลงหน้าเว็บ
-  countEl.textContent = "พบ " + result.length + " ใบ";
-  grid.innerHTML = "";
+  return result;
+}
 
-  if (result.length === 0) {
-    grid.innerHTML = '<div class="empty">ไม่พบการ์ดที่ตรงกับเงื่อนไข</div>';
+function renderFeatured(card) {
+  if (!card) {
+    featured.innerHTML = '<div class="empty">ไม่มีการ์ดให้แสดง</div>';
     return;
   }
 
-  result.forEach(function (card) {
+  const frameContent = card.image
+    ? '<img src="' + card.image + '" alt="' + card.name + '">'
+    : '<div class="placeholder">' + card.type + '</div>';
+
+  const statsHtml = card.atk !== null
+    ? '<div class="stats"><span class="atk">ATK ' + card.atk + '</span> / DEF ' + card.def + '</div>'
+    : '';
+
+  featured.innerHTML =
+    '<div class="featured-frame">' + frameContent + '</div>' +
+    '<div class="featured-info">' +
+      '<h2>' + card.name + '</h2>' +
+      '<div class="type">' + card.type + '</div>' +
+      statsHtml +
+    '</div>';
+}
+
+function renderThumbs(list) {
+  countEl.textContent = "พบ " + list.length + " ใบ";
+  thumbGrid.innerHTML = "";
+
+  if (list.length === 0) {
+    thumbGrid.innerHTML = '<div class="empty">ไม่พบการ์ดที่ตรงกับเงื่อนไข</div>';
+    return;
+  }
+
+  list.forEach(function (card) {
     const div = document.createElement("div");
-    div.className = "card";
+    div.className = "thumb" + (card === selectedCard ? " active" : "");
 
-    const imageHtml = card.image
+    div.innerHTML = card.image
       ? '<img src="' + card.image + '" alt="' + card.name + '">'
-      : "";
-    const atkDefText = card.atk !== null
-      ? "ATK " + card.atk + " / DEF " + card.def
-      : "";
+      : '<div class="thumb-label">' + card.name + '</div>';
 
-    div.innerHTML =
-      imageHtml +
-      "<h3>" + card.name + "</h3>" +
-      '<div class="meta">' + card.type + "</div>" +
-      '<div class="atk-def">' + atkDefText + "</div>";
+    div.addEventListener("click", function () {
+      selectedCard = card;
+      render();
+    });
 
-    grid.appendChild(div);
+    thumbGrid.appendChild(div);
   });
+}
+
+function render() {
+  const filtered = getFilteredCards();
+
+  // ถ้าการ์ดที่เลือกอยู่ถูกกรองออกไป ให้เลือกใบแรกของผลลัพธ์แทน
+  if (!filtered.includes(selectedCard)) {
+    selectedCard = filtered[0] || null;
+  }
+
+  renderFeatured(selectedCard);
+  renderThumbs(filtered);
 }
 
 searchBox.addEventListener("input", render);
 typeFilter.addEventListener("change", render);
 sortBy.addEventListener("change", render);
 
-render(); // แสดงผลครั้งแรกตอนโหลดหน้า
+render();
