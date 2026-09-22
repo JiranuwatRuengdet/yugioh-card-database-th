@@ -1,12 +1,40 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ฐานข้อมูลการ์ด Yu-Gi-Oh!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Noto+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="controls">...</div>
-  <div class="grid" id="cardGrid"></div>
+  <div class="wrap">
+    <h1>ฐานข้อมูลการ์ด Yu-Gi-Oh!</h1>
+    <p class="sub">เลือกดูการ์ดจากแถบด้านล่าง หรือค้นหาชื่อการ์ดที่ต้องการ</p>
+
+    <div class="controls">
+      <input id="searchBox" type="text" placeholder="ค้นหาชื่อการ์ด...">
+      <select id="typeFilter">
+        <option value="all">ทุกประเภท</option>
+        <option value="Monster">มอนสเตอร์</option>
+        <option value="Spell">เวทมนตร์</option>
+        <option value="Trap">กับดัก</option>
+      </select>
+      <select id="sortBy">
+        <option value="name">เรียงตามชื่อ (ก-ฮ)</option>
+        <option value="atk-desc">ATK สูง-ต่ำ</option>
+        <option value="atk-asc">ATK ต่ำ-สูง</option>
+      </select>
+    </div>
+
+    <!-- การ์ดหลักที่กำลังดูอยู่ -->
+    <section class="featured" id="featured"></section>
+
+    <div class="count" id="count"></div>
+    <div class="thumb-grid" id="thumbGrid"></div>
+  </div>
 
   <script src="cards.js"></script>
   <script src="script.js"></script>
