@@ -1,87 +1,349 @@
-<div class="wrap">
+<!DOCTYPE html>
+<html lang="th">
 
-  <h1>Yu-Gi-Oh! Card Search</h1>
-  <p class="sub">ค้นหาการ์ดและดูข้อมูลการ์ด</p>
+<head>
+  <meta charset="UTF-8">
 
-  <div class="controls">
-    <input
-      type="text"
-      id="searchInput"
-      placeholder="ค้นหาชื่อการ์ด..."
-    />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-    <select id="typeFilter">
-      <option value="">ทุกประเภท</option>
-      <option value="Monster">Monster</option>
-      <option value="Spell">Spell</option>
-      <option value="Trap">Trap</option>
-    </select>
+  <title>Yu-Gi-Oh! Card Database</title>
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body>
+
+  <div class="app">
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="header">
+
+      <div class="brand">
+
+        <div class="brand-small">
+          YU-GI-OH!
+        </div>
+
+        <h1>
+          Card Database
+        </h1>
+
+        <p>
+          ค้นหาการ์ดและดูรายละเอียดเอฟเฟกต์
+        </p>
+
+      </div>
+
+
+      <!-- SEARCH -->
+
+      <div class="search-area">
+
+        <div class="search-input">
+
+          <span class="search-icon">
+            🔍
+          </span>
+
+          <input
+            id="searchInput"
+            type="text"
+            placeholder="ค้นหาชื่อการ์ด..."
+            autocomplete="off"
+          >
+
+        </div>
+
+
+        <select id="typeFilter">
+
+          <option value="">
+            ทุกประเภท
+          </option>
+
+          <option value="Monster">
+            Monster
+          </option>
+
+          <option value="Spell">
+            Spell
+          </option>
+
+          <option value="Trap">
+            Trap
+          </option>
+
+        </select>
+
+
+        <button
+          id="clearButton"
+          type="button"
+        >
+          Clear
+        </button>
+
+      </div>
+
+    </header>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="workspace">
+
+
+      <!-- ========== LEFT ========== -->
+
+      <aside class="side-panel">
+
+        <div class="panel-title">
+
+          <div>
+
+            <span>
+              RELATED CARDS
+            </span>
+
+            <h2>
+              การ์ดที่เกี่ยวข้อง
+            </h2>
+
+          </div>
+
+          <small id="relatedCount">
+            0
+          </small>
+
+        </div>
+
+
+        <div
+          id="relatedGrid"
+          class="card-grid"
+        >
+
+          <div class="empty">
+            เลือกการ์ดเพื่อดูการ์ดที่เกี่ยวข้อง
+          </div>
+
+        </div>
+
+      </aside>
+
+
+      <!-- ========== CENTER ========== -->
+
+      <section class="detail-panel">
+
+
+        <!-- ยังไม่ได้เลือกการ์ด -->
+
+        <div
+          id="detailEmpty"
+          class="detail-empty"
+        >
+
+          <div class="empty-symbol">
+            ✦
+          </div>
+
+          <h2>
+            เลือกการ์ด
+          </h2>
+
+          <p>
+            ค้นหาการ์ดทางด้านขวา
+            แล้วเลือกการ์ดเพื่อดูรายละเอียด
+          </p>
+
+        </div>
+
+
+        <!-- รายละเอียด -->
+
+        <div
+          id="detailContent"
+          class="detail-content hidden"
+        >
+
+          <!-- รูป -->
+
+          <div class="detail-image">
+
+            <img
+              id="detailImage"
+              src=""
+              alt=""
+            >
+
+          </div>
+
+
+          <!-- ชื่อ -->
+
+          <div class="detail-name">
+
+            <span id="detailType">
+              Monster
+            </span>
+
+            <h2 id="detailCardName">
+              Card Name
+            </h2>
+
+          </div>
+
+
+          <!-- Stats -->
+
+          <div class="stats">
+
+            <div class="stat">
+
+              <span>
+                ATTRIBUTE
+              </span>
+
+              <strong id="detailAttribute">
+                -
+              </strong>
+
+            </div>
+
+
+            <div class="stat">
+
+              <span>
+                LEVEL
+              </span>
+
+              <strong id="detailLevel">
+                -
+              </strong>
+
+            </div>
+
+
+            <div class="stat">
+
+              <span>
+                ATK
+              </span>
+
+              <strong id="detailAtk">
+                -
+              </strong>
+
+            </div>
+
+
+            <div class="stat">
+
+              <span>
+                DEF
+              </span>
+
+              <strong id="detailDef">
+                -
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <!-- Effect -->
+
+          <div class="effect-box">
+
+            <div class="effect-title">
+              EFFECT
+            </div>
+
+            <p id="detailEffect">
+              -
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ========== RIGHT ========== -->
+
+      <aside class="side-panel">
+
+        <div class="panel-title">
+
+          <div>
+
+            <span>
+              SEARCH RESULTS
+            </span>
+
+            <h2>
+              ผลการค้นหา
+            </h2>
+
+          </div>
+
+          <small id="searchCount">
+            0
+          </small>
+
+        </div>
+
+
+        <div
+          id="searchGrid"
+          class="card-grid"
+        >
+
+          <div class="empty">
+            ค้นหาการ์ดเพื่อเริ่มต้น
+          </div>
+
+        </div>
+
+      </aside>
+
+    </main>
+
   </div>
 
-  <!-- ตรงกลาง: ว่างจนกว่าจะเลือก/ค้นหาการ์ด -->
-  <section id="cardDetail" class="card-detail hidden">
 
-    <div class="detail-image">
-      <div class="detail-frame">
-        <img id="detailImage" src="" alt="">
-      </div>
-    </div>
+  <!-- DATA -->
 
-    <div class="detail-info">
-      <h2 id="detailName"></h2>
+  <script src="card.js"></script>
 
-      <div class="detail-type" id="detailType"></div>
+  <!-- MAIN SCRIPT -->
 
-      <div class="detail-stats">
-        <span id="detailAttribute"></span>
-        <span id="detailLevel"></span>
-        <span id="detailAtk"></span>
-        <span id="detailDef"></span>
-      </div>
+  <script src="script.js"></script>
 
-      <!-- เผื่อข้อมูลเอฟเฟกต์ -->
-      <div class="effect-box">
-        <h3>Effect</h3>
-        <p id="detailEffect"></p>
-      </div>
+</body>
 
-    </div>
-
-  </section>
-
-
-  <!-- ด้านล่างแบ่ง 2 ฝั่ง -->
-  <div class="card-columns">
-
-    <!-- ซ้าย -->
-    <section class="card-section related-section">
-
-      <div class="section-header">
-        <h2>การ์ดที่เกี่ยวข้อง</h2>
-        <span id="relatedCount"></span>
-      </div>
-
-      <div id="relatedGrid" class="card-grid">
-        <!-- JS ใส่การ์ดตรงนี้ -->
-      </div>
-
-    </section>
-
-
-    <!-- ขวา -->
-    <section class="card-section search-section">
-
-      <div class="section-header">
-        <h2>ผลการค้นหา</h2>
-        <span id="searchCount"></span>
-      </div>
-
-      <div id="searchGrid" class="card-grid">
-        <!-- JS ใส่การ์ดตรงนี้ -->
-      </div>
-
-    </section>
-
-  </div>
-
-</div>
+</html>
