@@ -3,7 +3,7 @@
 // ถ้ายังไม่มีรูป ใส่ image: "" ไปก่อนได้ ระบบจะไม่แสดงรูป
 
 const cards = [
-  { name: "Blue-Eyes White Dragon", type: "Monster", atk: 3000, def: 2500, image: "images/001.png" },
+  { name: "Blue-Eyes White Dragon", type: "Monster", atk: 3000, def: 2500, image: "images/blue-eyes.jpg" },
   { name: "Dark Magician", type: "Monster", atk: 2500, def: 2100, image: "" },
   { name: "Exodia the Forbidden One", type: "Monster", atk: 1000, def: 1000, image: "" },
   { name: "Pot of Greed", type: "Spell", atk: null, def: null, image: "" },
